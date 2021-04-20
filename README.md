@@ -15,7 +15,7 @@ ArchForHumans is an script that tries to make the Arch installation more easy, b
 
 Is the first script that you should run. It's planned to be executed when you put the installation media on the PC or laptop. Once you've connected to internet, you can run those commands:
 
-> git clone https://github.com/euthzless/ArchForHumans
+> git clone https://github.com/euthzless/ArchForHumans.git
 
 > cd ArchForHumans
 
