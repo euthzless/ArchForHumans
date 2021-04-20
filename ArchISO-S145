@@ -1,45 +1,46 @@
 #!/usr/bin/env bash
 
-## Configuração do teclado e fonte do console
+## Keymap and font configuration
 loadkeys br-abnt2 # teclado
 setfont ter-132n  # fonte
 
-## Configuração de idioma
+## language settings
 nano /etc/locale.gen
 locale-gen
 export LANG=pt_BR.UTF-8
 
-## Conexão com a internet (wireless)
-ip link                                                              # mostrar dispositivos disponíveis
-rfkill unblock wifi                                                  # desbloqueio do rfkill
-iwctl --passphrase buxjxbyu station wlan0 connect brisa-564298-turbo # conectando com iwd
-ping -c 10 archlinux.org                                             # teste de conexão
+## Internet connection (wireless)
+ip link                                                      # list of devices
+rfkill unblock wifi                                          # rfkill unblock
+iwctl station wlan0 scan                                     # iwd scan
+iwctl --passphrase password station wlan0 connect myfakessid # iwd connect
+ping -c 10 archlinux.org                                     # connection test
 
-## Configuração do relógio do sistema
+## System clock settings
 timedatectl set-ntp true
 timedatectl status
 
-## Particionamento de discos
+## Disk partitions
 fdisk -l
 cfdisk /dev/sda
 # cfdisk /dev/sdb
 
-## Formatação das partições
+## Partion format
 mkfs.ext4 /dev/sda5
 mkfs.ext4 /dev/sda6
 mkswap /dev/sda7
 
-## Montar os sistemas de arquivos
+## Mount file systems
 mount /dev/sda5 /mnt
 mkdir /mnt/{boot,home} /mnt/boot/EFI
 mount /dev/sda1 /mnt/boot/EFI
 mount /dev/sda6 /mnt/home
 swapon /dev/sda7
 
-## Configuração do sistema final
+## Final system config
 pacstrap /mnt base linux linux-firmware bash-completion terminus-font nano networkmanager bluez bluez-utils man-db man-pages texinfo base-devel linux-headers git dosfstools mtools grub os-prober dialog               # instalação do sistema base
 genfstab -Up /mnt >> /mnt/etc/fstab # gerando o fstab
 arch-chroot /mnt                    # entrando no sistema final
 
-## Reiniciando...
+## Rebooting...
 reboot
