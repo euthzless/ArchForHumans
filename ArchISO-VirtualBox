@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+## Configuração do teclado e fonte do console
+loadkeys br-abnt2 # teclado
+setfont ter-132n  # fonte
+
+## Configuração de idioma
+nano /etc/locale.gen
+locale-gen
+export LANG=pt_BR.UTF-8
+
+## Teste de conexão com a internet (ethernet)
+ip link
+ping -c 10 archlinux.org
+
+## Configuração do relógio do sistema
+timedatectl set-ntp true
+timedatectl status
+
+## Particionamento de discos
+fdisk -l
+cfdisk /dev/sda
+
+## Formatação das partições
+mkfs.ext4 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkswap /dev/sda3
+# mkfs.fat -F32 /dev/sda1
+# mkfs.ext4 /dev/sda2
+# mkfs.ext4 /dev/sda3
+# mkswap /dev/sda4
+
+## Montar os sistemas de arquivos
+mount /dev/sda1 /mnt
+mkdir /mnt/home
+mount /dev/sda2 /mnt/home
+swapon /dev/sda3
+# mount /dev/sda2 /mnt
+# mkdir /mnt/{boot,home} /mnt/boot/EFI
+# mount /dev/sda1 /mnt/boot/EFI
+# mount /dev/sda3 /mnt/home
+# swapon /dev/sda4
+
+## Configuração do sistema final
+pacstrap /mnt base linux linux-firmware bash-completion terminus-font nano networkmanager bluez bluez-utils man-db man-pages texinfo base-devel linux-headers git dosfstools mtools grub os-prober dialog               # instalação do sistema base
+genfstab -Up /mnt >> /mnt/etc/fstab # gerando o fstab
+arch-chroot /mnt                    # entrando no sistema final
+
+## Reiniciando...
+reboot

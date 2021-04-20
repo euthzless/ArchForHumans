@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+ln -sf /usr/share/zoneinfo/America/Fortaleza /etc/localtime
+hwclock --systohc --utc
+
+nano /etc/locale.gen
+locale-gen
+echo LANG=pt_BR.UTF-8 >> /etc/locale.conf
+echo KEYMAP=br-abnt2 >> /etc/vconsole.conf
+
+nano /etc/hostname
+nano /etc/hosts
+
+mkinitcpio -P
+systemctl enable NetworkManager
+systemctl enable bluetooth
+
+passwd root
+useradd -mG wheel thales
+passwd thales
+nano /etc/sudoers
+
+grub-install --target=i386-pc --recheck /dev/sda
+# pacman -S efibootmgr
+# grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
