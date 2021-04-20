@@ -4,7 +4,7 @@
 loadkeys br-abnt2 # teclado
 setfont ter-132n  # fonte
 
-## language settings
+## Language settings
 nano /etc/locale.gen
 locale-gen
 export LANG=pt_BR.UTF-8
@@ -39,8 +39,8 @@ swapon /dev/sda7
 
 ## Final system config
 pacstrap /mnt base linux linux-firmware bash-completion terminus-font nano networkmanager bluez bluez-utils man-db man-pages texinfo base-devel linux-headers git dosfstools mtools grub os-prober dialog               # instalação do sistema base
-genfstab -Up /mnt >> /mnt/etc/fstab # gerando o fstab
-arch-chroot /mnt                    # entrando no sistema final
+genfstab -Up /mnt >> /mnt/etc/fstab # fstab generation
+arch-chroot /mnt                    # entering the final system with chroot
 
 ## Rebooting...
 reboot
